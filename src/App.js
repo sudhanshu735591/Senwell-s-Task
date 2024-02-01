@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 function App() {
+  const apiData = async () => {
+    try {
+      const response = await fetch("https://dummyjson.om/products/1");
+      const resData = await response?.json();
+      console.log("resData", resData);
+    } 
+    catch (error) {
+      console.error(error); 
+    }
+  };
+
+  useEffect(() => {
+    apiData();
+  }, []);
+
+  function ErrorFallback({ error, resetErrorBoundary }) {
+    return (
+      <div>
+        <h2>Something went wrong:</h2>
+        <pre style={{ whiteSpace: 'normal' }}>{error.message}</pre>
+        <button onClick={resetErrorBoundary}>Try again</button>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => {
+          console.log('Error boundary has been reset');
+        }}
+      >
+        {/* Your main component code goes here */}
+      </ErrorBoundary>
     </div>
   );
 }
