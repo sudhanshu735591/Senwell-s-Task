@@ -35,7 +35,6 @@ function App() {
           console.log('Error boundary has been reset');
         }}
       >
-        {/* Your main component code goes here */}
       </ErrorBoundary>
     </div>
   );
